@@ -34,17 +34,17 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(
-                List.of("http://localhost:5173")
-        );
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://employee-management-system-wheat-eta.vercel.app"
+        ));
 
         configuration.setAllowedMethods(
                 List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
         );
 
-        configuration.setAllowedHeaders(
-                List.of("Authorization", "Content-Type")
-        );
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
@@ -67,6 +67,7 @@ public class SecurityConfig {
                         )
                 )
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers(
                                 "/api/auth/login",
                                 "/api/auth/register"
@@ -82,16 +83,20 @@ public class SecurityConfig {
                                 "/api/employees",
                                 "/api/employees/**"
                         ).hasAnyRole("ADMIN", "EMPLOYEE")
+
                         .requestMatchers(
-                                HttpMethod.POST, "/api/employees/**"
+                                HttpMethod.POST,
+                                "/api/employees/**"
                         ).hasRole("ADMIN")
 
                         .requestMatchers(
-                                HttpMethod.PUT, "/api/employees/**"
+                                HttpMethod.PUT,
+                                "/api/employees/**"
                         ).hasRole("ADMIN")
 
                         .requestMatchers(
-                                HttpMethod.DELETE, "/api/employees/**"
+                                HttpMethod.DELETE,
+                                "/api/employees/**"
                         ).hasRole("ADMIN")
 
                         .anyRequest().authenticated()
@@ -111,7 +116,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration configuration) throws Exception {
+            AuthenticationConfiguration configuration
+    ) throws Exception {
         return configuration.getAuthenticationManager();
     }
 }

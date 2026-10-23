@@ -15,7 +15,7 @@ import {
 } from "recharts";
 import "./App.css";
 
-const API = "http://localhost:8081/api";
+const API = `${import.meta.env.VITE_API_URL}/api`;
 const PAGE_SIZE = 5;
 const CHART_COLORS = [
   "#4f46e5",
